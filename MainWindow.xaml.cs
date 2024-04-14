@@ -76,12 +76,12 @@ namespace LockScreen
         {
             if (FloatingPasswordBox.Password == liteDb.Select(1).passWord)
             {
-                Message("موفقیت", "در حال ورود به سیستم", NotificationType.Success);
+                Message("成功", "登录", NotificationType.Success);
                 System.Windows.Application.Current.Shutdown();
             }
             else
             {
-                Message("خطا", "رمز عبور نامعتبر است", NotificationType.Error);
+                Message("错误", "密码无效", NotificationType.Error);
             }
         }
 
@@ -143,17 +143,17 @@ namespace LockScreen
                     if (liteDb.Update(setting))
                     {
                         InstallMeOnStartUp(setting.isStartUp);
-                        Message("موفقیت", "اطلاعات ذخیره شد", NotificationType.Information);
+                        Message("成功", "信息已保存", NotificationType.Information);
                         show_hideSettingBox();
                     }
                     else
                     {
-                        Message("خطای برنامه", "مشکلی پیش آمده است لطفا دوباره تلاش کنید", NotificationType.Information);
+                        Message("应用程序错误", "出现问题，请重试", NotificationType.Information);
                     }
                 }
                 else
                 {
-                    Message("هشدار", "رمز عبورها باید یکسان باشند و نمیتواند خالی باشد", NotificationType.Warning);
+                    Message("警告", "密码必须相同且不能为空", NotificationType.Warning);
                 }
             }
             catch (Exception ex) { Debug.Text(ex, "btnSetting_Click()"); }
@@ -163,12 +163,11 @@ namespace LockScreen
         {
             if (FloatingPasswordBox.Password == liteDb.Select(1).passWord)
             {
-                Message("موفقیت", "به تنظیمات خوش آمدید", NotificationType.Success);
                 show_hideSettingBox();
             }
             else
             {
-                Message("خطا", "رمز عبور نامعتبر است", NotificationType.Error);
+                Message("错误", "当前密码错误", NotificationType.Error);
             }
         }
 

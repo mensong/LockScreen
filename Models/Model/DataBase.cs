@@ -24,7 +24,7 @@ namespace Models
                         id = 1,
                         isStartUp = true,
                         passWord = "123",
-                        title = "سلام خوش آمدی ...",
+                        title = "欢迎...",
                         userName = "admin"
                     };
                     collection.Insert(setting as TEntity);
