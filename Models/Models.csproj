@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Models</RootNamespace>
     <AssemblyName>Models</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Model\DataBase.cs" />
     <Compile Include="Model\Debug.cs" />
+    <Compile Include="Model\tbl_QuestionBank.cs" />
     <Compile Include="Model\tbl_Setting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
