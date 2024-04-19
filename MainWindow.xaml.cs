@@ -10,7 +10,6 @@ using Models;
 using Notifications.Wpf;
 using System.Windows.Markup;
 using System.Windows.Threading;
-using Jint;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,7 +20,6 @@ namespace LockScreen
     {
         DataBase<tbl_Setting> m_tblSetting;
         DataBase<tbl_QuestionBank> m_tblQuestionBank;
-        Engine m_js;
         DispatcherTimer m_timer;
         IEnumerable<tbl_QuestionBank> m_questions;
         tbl_QuestionBank m_curQuestion;
@@ -37,9 +35,8 @@ namespace LockScreen
                 this.ResizeMode = ResizeMode.CanResize;
                 this.WindowStyle = WindowStyle.ThreeDBorderWindow;
                 this.AllowsTransparency = false;
-#endif
-
-                // set width & height for App
+#else
+                // 满屏
                 int width = 0, height = 0;
                 foreach (var screen in Screen.AllScreens)
                 {
@@ -58,6 +55,7 @@ namespace LockScreen
                     int primaryHeight = screen.WorkingArea.Height;
                     mainBox.Margin = new Thickness(0, 0, ((primaryWidth / 2) - (mainBox.Width / 2)) - 120, 0);
                 }
+#endif
 
                 //生成题库
                 initQuestionBank();
@@ -70,29 +68,16 @@ namespace LockScreen
                 //从配置中更新内容
                 updateSetting();
 
-                //                m_js = new Engine();
-                //                m_js.SetValue("log", new Action<object>(Console.WriteLine));
-                //                //m_js.Evaluate("");
-                //                var res = m_js.Evaluate(
-                //@"
-                //    function hello() { 
-                //        log('Hello World');
-                //        return 123;
-                //    };
-
-                //    hello();
-                //");
-
                 mainWindow = this;
                 // hook keyboard
                 IntPtr hModule = GetModuleHandle(IntPtr.Zero);
                 m_hookProc = new LowLevelKeyboardProcDelegate(LowLevelKeyboardProc);
                 m_hHook = SetWindowsHookEx(WH_KEYBOARD_LL, m_hookProc, hModule, 0);
                 DisableTaskManager();//禁用任务管理器
-                //if (hHook == IntPtr.Zero)
-                //{
-                //    Console.WriteLine("Failed to set hook, error = " + Marshal.GetLastWin32Error());
-                //}
+                if (m_hHook == IntPtr.Zero)
+                {
+                    Console.WriteLine("Failed to set hook, error = " + Marshal.GetLastWin32Error());
+                }
 
                 //dy.Children.Add(XamlReader.Parse(@"<Button xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Content='Click Me'/>") as System.Windows.Controls.Button);
             }
