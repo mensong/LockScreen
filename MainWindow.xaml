@@ -23,7 +23,7 @@
         WindowStartupLocation="Manual" 
         Topmost="True"
         FocusManager.FocusedElement="{Binding ElementName=FloatingPasswordBox}"
-        Title="Lock Screen" 
+        Title="{DynamicResource MainWindowTitle}" 
         Height="900" 
         Width="1200">
     <Window.Background>
@@ -64,7 +64,8 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Name="txtTitle" Style="{DynamicResource MaterialDesignTitleTextBlock}" TextAlignment="Center" Text="好好学习，天天向上" Width="auto" />
                             <TextBlock Grid.Column="0" Grid.Row="1"  Name="Question" FontSize="32" TextAlignment="Right" Text="1+2=" Margin="0 0 5 0" VerticalAlignment="Bottom" />
-                            <TextBox Grid.Column="1" Grid.Row="1"  x:Name="editAnswer" FontSize="32" Style="{DynamicResource MaterialDesignTextBox}" TabIndex="0" VerticalAlignment="Bottom" Width="100" Margin="5 0 0 0" />
+                            <TextBox Grid.Column="1" Grid.Row="1"  x:Name="editAnswer" FontSize="32" Style="{DynamicResource MaterialDesignTextBox}" TabIndex="0" VerticalAlignment="Bottom" Width="100" Margin="5 0 0 0"
+                                     TextChanged="editAnswer_TextChanged"/>
                         </Grid>
                         <Grid>
                             <Grid.ColumnDefinitions>

@@ -68,6 +68,8 @@ namespace LockScreen
                 //从配置中更新内容
                 updateSetting();
 
+                editAnswer.Focus();
+
                 mainWindow = this;
                 // hook keyboard
                 IntPtr hModule = GetModuleHandle(IntPtr.Zero);
@@ -196,6 +198,38 @@ namespace LockScreen
             {
                 pickQuestion();
                 this.Visibility = Visibility.Visible;
+                editAnswer.Focus();
+            }
+        }
+
+        private void editAnswer_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            bool sucess = false;
+
+            if (m_curQuestion != null)
+            {
+                if (m_curQuestion.caseSensitive)
+                {
+                    if (editAnswer.Text == m_curQuestion.answer)
+                    {
+                        sucess = true;
+                    }
+                }
+                else if (editAnswer.Text.Equals(m_curQuestion.answer, StringComparison.OrdinalIgnoreCase))
+                {
+                    sucess = true;
+                }
+            }
+
+            if (sucess)
+            {
+                //Message("成功", "考试成功", NotificationType.Success);
+                this.Visibility = Visibility.Hidden;
+                editAnswer.Text = "";
+            }
+            else
+            {
+                //Message("错误", "答案错误", NotificationType.Error);
             }
         }
 
@@ -296,7 +330,7 @@ namespace LockScreen
                 Message("错误", "密码错误", NotificationType.Error);
             }
         }
-
+        
         private void btnSettingOK_Click(object sender, RoutedEventArgs e)
         {
             if (!m_tblSetting.Update(m_edittingSetting))
