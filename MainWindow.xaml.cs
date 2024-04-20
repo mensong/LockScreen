@@ -409,12 +409,12 @@ namespace LockScreen
         {
             try
             {
-                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
+                    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
                 Assembly curAssembly = Assembly.GetExecutingAssembly();
                 if (setInStartUp)
                 {
-                    if (key.GetValue(curAssembly.GetName().Name) == null)
-                        key.SetValue(curAssembly.GetName().Name, curAssembly.Location);
+                    key.SetValue(curAssembly.GetName().Name, curAssembly.Location);
                 }
                 else
                 {
