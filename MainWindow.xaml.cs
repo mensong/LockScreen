@@ -414,7 +414,7 @@ namespace LockScreen
                 Assembly curAssembly = Assembly.GetExecutingAssembly();
                 if (setInStartUp)
                 {
-                    key.SetValue(curAssembly.GetName().Name, curAssembly.Location);
+                    key.SetValue(curAssembly.GetName().Name, "\"" + curAssembly.Location + "\"");
                 }
                 else
                 {
