@@ -12,6 +12,7 @@ using System.Windows.Markup;
 using System.Windows.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace LockScreen
 {
@@ -67,9 +68,7 @@ namespace LockScreen
 
                 //从配置中更新内容
                 updateSetting();
-
-                editAnswer.Focus();
-
+                
                 mainWindow = this;
                 // hook keyboard
                 IntPtr hModule = GetModuleHandle(IntPtr.Zero);
@@ -527,6 +526,11 @@ namespace LockScreen
         private void CloseApp_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Keyboard.Focus(editAnswer);
         }
     }
 }

@@ -22,10 +22,11 @@
         Closing="Window_Closed"
         WindowStartupLocation="Manual" 
         Topmost="True"
-        FocusManager.FocusedElement="{Binding ElementName=FloatingPasswordBox}"
+        FocusManager.FocusedElement="{Binding ElementName=editAnswer}"
         Title="{DynamicResource MainWindowTitle}" 
         Height="900" 
-        Width="1200">
+        Width="1200" 
+        Loaded="Window_Loaded">
     <Window.Background>
         <SolidColorBrush Opacity="0.6" Color="Black" />
     </Window.Background>
