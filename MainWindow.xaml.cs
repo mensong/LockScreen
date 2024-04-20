@@ -324,17 +324,17 @@ namespace LockScreen
                 m_timer = null;
             }
             tbl_Setting settingExamInterval = m_tblSetting.SelectOne(a => a.name == "ExamInterval");
+            int ExamInterval = 120;
             if (settingExamInterval != null)
             {
-                int ExamInterval = 120;
-                int.TryParse(settingExamInterval.value, out ExamInterval);
-                if (ExamInterval > 0)
-                {
-                    m_timer = new DispatcherTimer();
-                    m_timer.Interval = TimeSpan.FromSeconds(ExamInterval);
-                    m_timer.Tick += new System.EventHandler(startToExam);
-                    m_timer.Start();
-                }
+                int.TryParse(settingExamInterval.value, out ExamInterval);                
+            }
+            if (ExamInterval > 0)
+            {
+                m_timer = new DispatcherTimer();
+                m_timer.Interval = TimeSpan.FromSeconds(ExamInterval);
+                m_timer.Tick += new System.EventHandler(startToExam);
+                m_timer.Start();
             }
 
             //重新设置开机启动
