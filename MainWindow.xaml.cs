@@ -21,7 +21,10 @@ namespace LockScreen
     {
         DataBase<tbl_Setting> m_tblSetting;
         DataBase<tbl_QuestionBank> m_tblQuestionBank;
-        DispatcherTimer m_timer;
+        DispatcherTimer m_timerExam;
+        DispatcherTimer m_timerShutdown;
+        bool m_isTimerShutdowning = false;
+        int m_shutdowningCount = 30;
         IEnumerable<tbl_QuestionBank> m_questions;
         tbl_QuestionBank m_curQuestion;
         List<tbl_Setting> m_edittingSetting;
@@ -128,6 +131,10 @@ namespace LockScreen
             {
                 Console.WriteLine("初始化配置title失败");
             }
+            if (!initSettingItem("AutoShutdown", "1200"))
+            {
+                Console.WriteLine("初始化配置AutoShutdown失败");
+            }
         }
 
         void initQuestionBank()
@@ -198,6 +205,33 @@ namespace LockScreen
                 pickQuestion();
                 this.Visibility = Visibility.Visible;
                 editAnswer.Focus();
+            }
+        }
+
+        void startAutoShutdown(object sender, EventArgs e)
+        {
+            if (m_isTimerShutdowning)
+            {
+                if (m_shutdowningCount > 0)
+                {
+                    Message("电脑即将关闭", "电脑即将在" + m_shutdowningCount.ToString() + "后关闭", 
+                        NotificationType.Warning, 1);
+                    --m_shutdowningCount;
+                    return;
+                }
+                else
+                {
+                    DoExitWin(EWX_SHUTDOWN | EWX_FORCE);
+                }
+            }
+            else
+            {
+                this.Visibility = Visibility.Visible;
+                m_isTimerShutdowning = true;
+
+                m_timerShutdown.Stop();
+                m_timerShutdown.Interval = TimeSpan.FromSeconds(1);
+                m_timerShutdown.Start();
             }
         }
 
@@ -323,6 +357,15 @@ namespace LockScreen
                 SettingContext.Visibility = Visibility.Visible;
 
                 myPasswordBox.Password = "";
+
+                #region 在正在关机期间输入正确的密码，即可取消关机
+                if (m_isTimerShutdowning)
+                {
+                    m_isTimerShutdowning = false;
+                    m_timerShutdown.Stop();
+                    Message("设置", "已取消关机", NotificationType.Success);
+                }
+                #endregion
             }
             else
             {
@@ -351,10 +394,10 @@ namespace LockScreen
         private void updateSetting()
         {
             //重新设置定时器
-            if (m_timer != null)
+            if (m_timerExam != null)
             {
-                m_timer.Stop();
-                m_timer = null;
+                m_timerExam.Stop();
+                m_timerExam = null;
             }
             tbl_Setting settingExamInterval = m_tblSetting.SelectOne(a => a.name == "ExamInterval");
             int ExamInterval = 120;
@@ -364,10 +407,30 @@ namespace LockScreen
             }
             if (ExamInterval > 0)
             {
-                m_timer = new DispatcherTimer();
-                m_timer.Interval = TimeSpan.FromSeconds(ExamInterval);
-                m_timer.Tick += new System.EventHandler(startToExam);
-                m_timer.Start();
+                m_timerExam = new DispatcherTimer();
+                m_timerExam.Interval = TimeSpan.FromSeconds(ExamInterval);
+                m_timerExam.Tick += new System.EventHandler(startToExam);
+                m_timerExam.Start();
+            }
+
+            //重新设置自动关机
+            if (m_timerShutdown != null)
+            {
+                m_timerShutdown.Stop();
+                m_timerShutdown = null;
+            }
+            tbl_Setting settingShutdownInterval = m_tblSetting.SelectOne(a => a.name == "AutoShutdown");
+            int ShutdownInterval = 1200;
+            if (settingShutdownInterval != null)
+            {
+                int.TryParse(settingShutdownInterval.value, out ShutdownInterval);
+            }
+            if (ShutdownInterval > 0)
+            {
+                m_timerShutdown = new DispatcherTimer();
+                m_timerShutdown.Interval = TimeSpan.FromSeconds(ShutdownInterval);
+                m_timerShutdown.Tick += new System.EventHandler(startAutoShutdown);
+                m_timerShutdown.Start();
             }
 
             //重新设置开机启动
@@ -389,7 +452,7 @@ namespace LockScreen
 
         // show notification message 
         // <param name="type">blue-green-red-yellow</param>
-        public void Message(string title, string message, NotificationType type)
+        public void Message(string title, string message, NotificationType type, int closeNextSeconds = 3)
         {
             try
             {
@@ -399,7 +462,7 @@ namespace LockScreen
                     Message = message,
                     Title = title
                 }
-                , TimeSpan.FromSeconds(3), null, null);
+                , TimeSpan.FromSeconds(closeNextSeconds), null, null);
                 //, TimeSpan.FromSeconds(3), onClick: () => Console.WriteLine("Click"), onClose: () => Console.WriteLine("Closed!"));
             }
             catch (Exception ex) { Debug.Text(ex, "Message()"); }
@@ -533,5 +596,59 @@ namespace LockScreen
         {
             //Keyboard.Focus(editAnswer);
         }
+
+
+        #region 关机
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        internal struct TokPriv1Luid
+        {
+            public int Count;
+            public long Luid;
+            public int Attr;
+        }
+
+        [DllImport("kernel32.dll", ExactSpelling = true)]
+        internal static extern IntPtr GetCurrentProcess();
+
+        [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
+        internal static extern bool OpenProcessToken(IntPtr h, int acc, ref IntPtr phtok);
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        internal static extern bool LookupPrivilegeValue(string host, string name, ref long pluid);
+
+        [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
+        internal static extern bool AdjustTokenPrivileges(IntPtr htok, bool disall,
+        ref TokPriv1Luid newst, int len, IntPtr prev, IntPtr relen);
+
+        [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
+        internal static extern bool ExitWindowsEx(int flg, int rea);
+
+        internal const int SE_PRIVILEGE_ENABLED = 0x00000002;
+        internal const int TOKEN_QUERY = 0x00000008;
+        internal const int TOKEN_ADJUST_PRIVILEGES = 0x00000020;
+        internal const string SE_SHUTDOWN_NAME = "SeShutdownPrivilege";
+        internal const int EWX_LOGOFF = 0x00000000;
+        internal const int EWX_SHUTDOWN = 0x00000001;
+        internal const int EWX_REBOOT = 0x00000002;
+        internal const int EWX_FORCE = 0x00000004;
+        internal const int EWX_POWEROFF = 0x00000008;
+        internal const int EWX_FORCEIFHUNG = 0x00000010;
+
+        //关机:DoExitWin(EWX_SHUTDOWN);
+        private static void DoExitWin(int flg)
+        {
+            bool ok;
+            TokPriv1Luid tp;
+            IntPtr hproc = GetCurrentProcess();
+            IntPtr htok = IntPtr.Zero;
+            ok = OpenProcessToken(hproc, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, ref htok);
+            tp.Count = 1;
+            tp.Luid = 0;
+            tp.Attr = SE_PRIVILEGE_ENABLED;
+            ok = LookupPrivilegeValue(null, SE_SHUTDOWN_NAME, ref tp.Luid);
+            ok = AdjustTokenPrivileges(htok, false, ref tp, 0, IntPtr.Zero, IntPtr.Zero);
+            ok = ExitWindowsEx(flg, 0);
+        }
+        #endregion
     }
 }
