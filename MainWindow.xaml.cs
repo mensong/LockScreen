@@ -198,7 +198,7 @@ namespace LockScreen
             }
         }
 
-        void startToExam(object sender, EventArgs e)
+        void timerExamTick_Handler(object sender, EventArgs e)
         {
             if (this.Visibility != Visibility.Visible)
             {
@@ -208,8 +208,10 @@ namespace LockScreen
             }
         }
 
-        void startAutoShutdown(object sender, EventArgs e)
+        void timerAutoShutdownTick_Handler(object sender, EventArgs e)
         {
+            this.Visibility = Visibility.Visible;
+
             if (m_isTimerShutdowning)
             {
                 if (m_shutdowningCount > 0)
@@ -226,7 +228,6 @@ namespace LockScreen
             }
             else
             {
-                this.Visibility = Visibility.Visible;
                 m_isTimerShutdowning = true;
 
                 m_timerShutdown.Stop();
@@ -235,7 +236,7 @@ namespace LockScreen
             }
         }
 
-        private void editAnswer_TextChanged(object sender, TextChangedEventArgs e)
+        private bool checkAnswer()
         {
             bool sucess = false;
 
@@ -253,49 +254,46 @@ namespace LockScreen
                     sucess = true;
                 }
             }
+                        
+            return sucess;
+        }
 
-            if (sucess)
+        private void editAnswer_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (checkAnswer())
             {
-                //Message("成功", "考试成功", NotificationType.Success);
-                this.Visibility = Visibility.Hidden;
-                editAnswer.Text = "";
-            }
-            else
-            {
-                //Message("错误", "答案错误", NotificationType.Error);
+                Message("成功", "正确，你真棒！", NotificationType.Success);
+
+                var timerDelay = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+                timerDelay.Start();
+                timerDelay.Tick += (s, a) =>
+                {
+                    timerDelay.Stop();
+
+                    this.Visibility = Visibility.Hidden;
+                    editAnswer.Text = "";
+                };
             }
         }
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
-            bool sucess = false;
-
-            if (m_curQuestion != null)
+            if (checkAnswer())
             {
-                if (m_curQuestion.caseSensitive)
-                {
-                    if (editAnswer.Text == m_curQuestion.answer)
-                    {
-                        sucess = true;
-                    }
-                }
-                else if (editAnswer.Text.Equals(m_curQuestion.answer, StringComparison.OrdinalIgnoreCase))
-                {
-                    sucess = true;
-                }
-            }
+                Message("成功", "正确，你真棒！", NotificationType.Success);
 
-            if (sucess)
-            {
-                Message("成功", "考试成功", NotificationType.Success);
-                this.Visibility = Visibility.Hidden;
+                var timerDelay = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+                timerDelay.Start();
+                timerDelay.Tick += (s, a) =>
+                {
+                    timerDelay.Stop();
+
+                    this.Visibility = Visibility.Hidden;
+                    editAnswer.Text = "";
+                };
             }
             else
-            {
                 Message("错误", "答案错误", NotificationType.Error);
-            }
-
-            editAnswer.Text = "";
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -409,7 +407,7 @@ namespace LockScreen
             {
                 m_timerExam = new DispatcherTimer();
                 m_timerExam.Interval = TimeSpan.FromSeconds(ExamInterval);
-                m_timerExam.Tick += new System.EventHandler(startToExam);
+                m_timerExam.Tick += new System.EventHandler(timerExamTick_Handler);
                 m_timerExam.Start();
             }
 
@@ -429,7 +427,7 @@ namespace LockScreen
             {
                 m_timerShutdown = new DispatcherTimer();
                 m_timerShutdown.Interval = TimeSpan.FromSeconds(ShutdownInterval);
-                m_timerShutdown.Tick += new System.EventHandler(startAutoShutdown);
+                m_timerShutdown.Tick += new System.EventHandler(timerAutoShutdownTick_Handler);
                 m_timerShutdown.Start();
             }
 
