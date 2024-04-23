@@ -24,7 +24,8 @@ namespace LockScreen
         DispatcherTimer m_timerExam;
         DispatcherTimer m_timerShutdown;
         bool m_isTimerShutdowning = false;
-        int m_shutdowningCount = 30;
+        const int SHUTDOWN_COUNT = 30;
+        int m_shutdowningCount = SHUTDOWN_COUNT;
         IEnumerable<tbl_QuestionBank> m_questions;
         tbl_QuestionBank m_curQuestion;
         List<tbl_Setting> m_edittingSetting;
@@ -229,6 +230,7 @@ namespace LockScreen
             else
             {
                 m_isTimerShutdowning = true;
+                m_shutdowningCount = SHUTDOWN_COUNT;
 
                 m_timerShutdown.Stop();
                 m_timerShutdown.Interval = TimeSpan.FromSeconds(1);
