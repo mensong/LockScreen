@@ -246,12 +246,14 @@ namespace LockScreen
             {
                 if (m_curQuestion.caseSensitive)
                 {
-                    if (editAnswer.Text == m_curQuestion.answer)
+                    if (editAnswer.Text.Trim() == m_curQuestion.answer.Trim())
                     {
                         sucess = true;
                     }
                 }
-                else if (editAnswer.Text.Equals(m_curQuestion.answer, StringComparison.OrdinalIgnoreCase))
+                else if (editAnswer.Text.Trim().Equals(
+                    m_curQuestion.answer.Trim(), 
+                    StringComparison.OrdinalIgnoreCase))
                 {
                     sucess = true;
                 }
