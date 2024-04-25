@@ -1,0 +1,67 @@
+﻿<Window x:Class="LockScreen.EditQuestionBank"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        FontFamily="{DynamicResource MyVazir}"
+        TextElement.FontSize="13" 
+        TextElement.FontWeight="Regular"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto" 
+        xmlns:local="clr-namespace:LockScreen"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Title="问题库管理" Height="800" Width="600">
+    <Grid>
+        <!--设置内容-->
+        <Grid x:Name="SettingContext">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="60" />
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <DataGrid Name="ListQuestions" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="True"
+                                      BeginningEdit="ListQuestions_BeginningEdit" 
+                                      CellEditEnding="ListQuestions_CellEditEnding" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID"
+                                    Binding="{Binding id}"
+                                    Width="Auto"/>
+                        <DataGridTextColumn Header="问题"
+                                    Binding="{Binding question}"
+                                    Width="Auto"/>
+                        <DataGridTextColumn Header="答案"
+                                    Binding="{Binding answer}"
+                                    Width="Auto"/>
+                        <DataGridTextColumn Header="区分大小写"
+                                    Binding="{Binding caseSensitive}"
+                                    Width="Auto"/>
+                        <DataGridTextColumn Header="等级"
+                                    Binding="{Binding level}"
+                                    Width="Auto"/>
+                        <DataGridTextColumn Header="答对次数"
+                                    Binding="{Binding passCount}"
+                                    Width="Auto"/>
+                        <DataGridTextColumn Header="答错次数"
+                                    Binding="{Binding errorCount}"
+                                    Width="Auto"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Name="btnSave" IsDefault="True" TabIndex="1" Click="btnSave_Click" Content="保存" 
+                                materialDesign:ButtonAssist.CornerRadius="15" Margin="10" />
+                <Button Grid.Column="1" Name="btnCancel" IsDefault="True" TabIndex="2" Click="btnCancel_Click" Content="取消" 
+                                materialDesign:ButtonAssist.CornerRadius="15" Margin="10" Background="Gray" />
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Window>

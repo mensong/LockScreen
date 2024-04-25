@@ -91,8 +91,8 @@
         </materialDesign:Transitioner>
 
         <!--设置窗口-->
-        <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="4"  x:Name="settingBox" Visibility="Collapsed" >
-            <materialDesign:Card Padding="15" Style="{StaticResource SZcardSetting}" VerticalAlignment="Center" Height="450" Width="350" >
+        <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="4"  x:Name="settingBox" Visibility="Collapsed" ><!--Visibility="Collapsed"-->
+            <materialDesign:Card Padding="15" Style="{StaticResource SZcardSetting}" VerticalAlignment="Center" Height="450" Width="400" >
                 <StackPanel KeyboardNavigation.TabNavigation="Cycle">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -106,7 +106,7 @@
                     </Grid>
 
                     <!--输入管理密码-->
-                    <Grid x:Name="SettingPassword" >
+                    <Grid x:Name="SettingPassword" Visibility="Collapsed"><!--Visibility="Collapsed"-->
                         <Grid.RowDefinitions>
                             <RowDefinition Height="300" />
                             <RowDefinition Height="auto" />
@@ -117,7 +117,7 @@
                     </Grid>
                     
                     <!--设置内容-->
-                    <Grid x:Name="SettingContext" Visibility="Collapsed" >
+                    <Grid x:Name="SettingContext" Visibility="Collapsed" ><!--Visibility="Collapsed"-->
                         <Grid.RowDefinitions>
                             <RowDefinition Height="300" />
                             <RowDefinition Height="auto" />
@@ -143,12 +143,15 @@
 
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="1*" />
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0" Name="btnSetting" IsDefault="True" TabIndex="1" Click="btnSettingOK_Click" Content="保存" 
                                 materialDesign:ButtonAssist.CornerRadius="15" Margin="10" />
-                            <Button Grid.Column="1" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" ToolTip="关闭应用" Margin="0,3,3,3" Click="CloseApp_Click" Background="Red">
+                            <Button Grid.Column="1" Name="btnQuestionsManager" IsDefault="True" TabIndex="1" Click="btnQuestionsManager_Click" Content="题库管理" 
+                                materialDesign:ButtonAssist.CornerRadius="15" Margin="10" />
+                            <Button Grid.Column="2" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" ToolTip="关闭应用" Margin="0,3,3,3" Click="CloseApp_Click" Background="Gray">
                                 <materialDesign:PackIcon Kind="DoorClosed" Height="24" Width="24" />
                             </Button>
                         </Grid>

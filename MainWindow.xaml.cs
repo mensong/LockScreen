@@ -67,9 +67,8 @@ namespace LockScreen
                 //生成配置
                 initSetting();
                 
-                m_questions = m_tblQuestionBank.SelectAll();                     
-                pickQuestion();
-
+                m_questions = m_tblQuestionBank.SelectAll();
+                
                 //从配置中更新内容
                 updateSetting();
                 
@@ -83,6 +82,9 @@ namespace LockScreen
                 {
                     Console.WriteLine("Failed to set hook, error = " + Marshal.GetLastWin32Error());
                 }
+
+                //开始一个考试
+                startAExam();
 
                 //dy.Children.Add(XamlReader.Parse(@"<Button xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Content='Click Me'/>") as System.Windows.Controls.Button);
             }
@@ -199,13 +201,20 @@ namespace LockScreen
             }
         }
 
+        void startAExam()
+        {
+            pickQuestion();
+            this.Visibility = Visibility.Visible;
+            editAnswer.Focus();
+
+            m_timerExam.Stop();
+        }
+
         void timerExamTick_Handler(object sender, EventArgs e)
         {
             if (this.Visibility != Visibility.Visible)
             {
-                pickQuestion();
-                this.Visibility = Visibility.Visible;
-                editAnswer.Focus();
+                startAExam();
             }
         }
 
@@ -267,6 +276,7 @@ namespace LockScreen
             if (checkAnswer())
             {
                 Message("成功", "正确，你真棒！", NotificationType.Success);
+                m_timerExam.Start();
 
                 var timerDelay = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
                 timerDelay.Start();
@@ -285,6 +295,7 @@ namespace LockScreen
             if (checkAnswer())
             {
                 Message("成功", "正确，你真棒！", NotificationType.Success);
+                m_timerExam.Start();
 
                 var timerDelay = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
                 timerDelay.Start();
@@ -412,7 +423,7 @@ namespace LockScreen
                 m_timerExam = new DispatcherTimer();
                 m_timerExam.Interval = TimeSpan.FromSeconds(ExamInterval);
                 m_timerExam.Tick += new System.EventHandler(timerExamTick_Handler);
-                m_timerExam.Start();
+                //m_timerExam.Start();//这里不启动，在考试完后会自动
             }
 
             //重新设置自动关机
@@ -652,5 +663,12 @@ namespace LockScreen
             ok = ExitWindowsEx(flg, 0);
         }
         #endregion
+
+        private void btnQuestionsManager_Click(object sender, RoutedEventArgs e)
+        {
+            EditQuestionBank editQuestionBank = new EditQuestionBank();
+            editQuestionBank.Owner = this;
+            editQuestionBank.ShowDialog();
+        }
     }
 }
