@@ -49,8 +49,6 @@ namespace LockScreen
                 {
                     level = 1,
                     caseSensitive = false,
-                    passCount = 0,
-                    errorCount = 0,
                 };
 
                 int id = 1;

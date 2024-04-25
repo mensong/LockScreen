@@ -17,9 +17,5 @@ namespace Models
         public bool caseSensitive { get; set; }
 
         public int level { get; set; }
-
-        public int passCount { get; set; }
-
-        public int errorCount { get; set; }
     }
 }

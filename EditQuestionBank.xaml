@@ -41,12 +41,6 @@
                         <DataGridTextColumn Header="等级"
                                     Binding="{Binding level}"
                                     Width="Auto"/>
-                        <DataGridTextColumn Header="答对次数"
-                                    Binding="{Binding passCount}"
-                                    Width="Auto"/>
-                        <DataGridTextColumn Header="答错次数"
-                                    Binding="{Binding errorCount}"
-                                    Width="Auto"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
