@@ -91,7 +91,8 @@
         </materialDesign:Transitioner>
 
         <!--设置窗口-->
-        <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="4"  x:Name="settingBox" Visibility="Collapsed" ><!--Visibility="Collapsed"-->
+        <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="4"  x:Name="settingBox"
+               Visibility="Collapsed"><!--Visibility="Collapsed"-->
             <materialDesign:Card Padding="15" Style="{StaticResource SZcardSetting}" VerticalAlignment="Center" Height="450" Width="400" >
                 <StackPanel KeyboardNavigation.TabNavigation="Cycle">
                     <Grid>
@@ -106,13 +107,16 @@
                     </Grid>
 
                     <!--输入管理密码-->
-                    <Grid x:Name="SettingPassword" Visibility="Collapsed"><!--Visibility="Collapsed"-->
+                    <Grid x:Name="SettingPassword"><!--Visibility="Collapsed"-->
                         <Grid.RowDefinitions>
                             <RowDefinition Height="300" />
                             <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
-                        <PasswordBox Grid.Row="0" x:Name="myPasswordBox" TabIndex="0" VerticalAlignment="Center" materialDesign:HintAssist.Hint="输入管理密码" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="10" />
-                        <Button Grid.Row="1" Name="btnCheckPassword" IsDefault="True" TabIndex="1" Click="btnCheckPassword_Click" Content="验证密码" 
+                        <PasswordBox Grid.Row="0" x:Name="myPasswordBox" TabIndex="0" VerticalAlignment="Center" 
+                                     materialDesign:HintAssist.Hint="输入管理密码" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="10"
+                                     KeyDown="myPasswordBox_KeyDown"/>
+                        <Button Grid.Row="1" Name="btnCheckPassword" IsDefault="True" TabIndex="1" 
+                                Click="btnCheckPassword_Click" Content="验证密码" 
                                 materialDesign:ButtonAssist.CornerRadius="15" Margin="10" />
                     </Grid>
                     

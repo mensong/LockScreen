@@ -383,7 +383,13 @@ namespace LockScreen
                 Message("错误", "密码错误", NotificationType.Error);
             }
         }
-        
+
+        private void myPasswordBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.IsDown && e.Key == Key.Enter)
+                btnCheckPassword_Click(sender, null);
+        }
+
         private void btnSettingOK_Click(object sender, RoutedEventArgs e)
         {
             if (!m_tblSetting.Update(m_edittingSetting))
