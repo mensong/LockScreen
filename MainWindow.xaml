@@ -63,9 +63,12 @@
                                 <RowDefinition Height="50" />
                                 <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Name="txtTitle" Style="{DynamicResource MaterialDesignTitleTextBlock}" TextAlignment="Center" Text="好好学习，天天向上" Width="auto" />
-                            <TextBlock Grid.Column="0" Grid.Row="1"  Name="Question" FontSize="32" TextAlignment="Right" Text="1+2=" Margin="0 0 5 0" VerticalAlignment="Bottom" />
-                            <TextBox Grid.Column="1" Grid.Row="1"  x:Name="editAnswer" FontSize="32" Style="{DynamicResource MaterialDesignTextBox}" TabIndex="0" VerticalAlignment="Bottom" Width="100" Margin="5 0 0 0"
+                            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Name="txtTitle" Style="{DynamicResource MaterialDesignTitleTextBlock}" 
+                                       TextAlignment="Center" Text="好好学习，天天向上" Width="auto" />
+                            <TextBlock Grid.Column="0" Grid.Row="1"  Name="Question" FontSize="32" TextAlignment="Right" Text="1+2=" 
+                                       Margin="0 0 5 0" VerticalAlignment="Bottom" />
+                            <TextBox Grid.Column="1" Grid.Row="1"  x:Name="editAnswer" FontSize="32" Style="{DynamicResource MaterialDesignTextBox}" 
+                                     TabIndex="0" VerticalAlignment="Bottom" Width="100" Margin="5 0 0 0"
                                      TextChanged="editAnswer_TextChanged"/>
                         </Grid>
                         <Grid>
@@ -78,8 +81,10 @@
                                 <RowDefinition Height="10" />
                                 <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
-                            <Button Name="btnLogin" Grid.Column="0" Grid.Row="1" IsDefault="True" TabIndex="1" Click="BtnLogin_Click" Content="登录" materialDesign:ButtonAssist.CornerRadius="20" Margin="10,10,10,10" Height="38" Grid.ColumnSpan="2" />
-                            <Button  Grid.Column="2" Grid.Row="1"  Style="{StaticResource MaterialDesignFloatingActionMiniButton}" ToolTip="Setting" Margin="0,9,10,9" Click="ButtonSetting_Click">
+                            <Button Name="btnLogin" Grid.Column="0" Grid.Row="1" IsDefault="True" TabIndex="1" Click="BtnLogin_Click" Content="确定" 
+                                    materialDesign:ButtonAssist.CornerRadius="20" Margin="10,10,10,10" Height="38" Grid.ColumnSpan="2" />
+                            <Button  Grid.Column="2" Grid.Row="1"  Style="{StaticResource MaterialDesignFloatingActionMiniButton}" ToolTip="Setting" 
+                                     Margin="0,9,10,9" Click="ButtonSetting_Click">
                                 <materialDesign:PackIcon Kind="Settings" Height="24" Width="24" />
                             </Button>
 
@@ -100,8 +105,10 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="0 5 0 0" TextAlignment="Center" Text="设置" />
-                        <Button Grid.Column="1"  Style="{StaticResource MaterialDesignFloatingActionMiniButton}" ToolTip="关闭" Margin="0,3,3,3" Click="btnSettingClose_Click">
+                        <TextBlock Grid.Column="0" Style="{DynamicResource MaterialDesignTitleTextBlock}" 
+                                   Margin="0 5 0 0" TextAlignment="Center" Text="设置" />
+                        <Button Grid.Column="1"  Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                                ToolTip="关闭" Margin="0,3,3,3" Click="btnSettingClose_Click">
                             <materialDesign:PackIcon Kind="Close" Height="14" Width="14" />
                         </Button>
                     </Grid>
