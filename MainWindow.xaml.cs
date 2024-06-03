@@ -205,7 +205,8 @@ namespace LockScreen
             this.Visibility = Visibility.Visible;
             editAnswer.Focus();
 
-            m_timerExam.Stop();
+            if (m_timerExam != null)
+                m_timerExam.Stop();
         }
 
         void timerExamTick_Handler(object sender, EventArgs e)
@@ -239,9 +240,12 @@ namespace LockScreen
                 m_isTimerShutdowning = true;
                 m_shutdowningCount = SHUTDOWN_COUNT;
 
-                m_timerShutdown.Stop();
-                m_timerShutdown.Interval = TimeSpan.FromSeconds(1);
-                m_timerShutdown.Start();
+                if (m_timerShutdown != null)
+                {
+                    m_timerShutdown.Stop();
+                    m_timerShutdown.Interval = TimeSpan.FromSeconds(1);
+                    m_timerShutdown.Start();
+                }
             }
         }
 
@@ -274,7 +278,9 @@ namespace LockScreen
             if (checkAnswer())
             {
                 Message("成功", "正确，你真棒！", NotificationType.Success);
-                m_timerExam.Start();
+
+                if (m_timerExam != null)
+                    m_timerExam.Start();
 
                 var timerDelay = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
                 timerDelay.Start();
@@ -293,7 +299,9 @@ namespace LockScreen
             if (checkAnswer())
             {
                 Message("成功", "正确，你真棒！", NotificationType.Success);
-                m_timerExam.Start();
+
+                if (m_timerExam != null)
+                    m_timerExam.Start();
 
                 var timerDelay = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
                 timerDelay.Start();
@@ -373,7 +381,8 @@ namespace LockScreen
                 if (m_isTimerShutdowning)
                 {
                     m_isTimerShutdowning = false;
-                    m_timerShutdown.Stop();
+                    if (m_timerShutdown != null)
+                        m_timerShutdown.Stop();
                     Message("设置", "已取消关机", NotificationType.Success);
                 }
                 #endregion
